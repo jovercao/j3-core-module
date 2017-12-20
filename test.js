@@ -53,12 +53,14 @@
 
 import { download } from './src'
 
-download('node-sql')
+var download = require('./src')
 
-// npmInstall('', info => console.log(info), err => console.error(err)).then(() => {
-//     console.log(i18n.__('install_complete'))
-// })
-// .error(err => {
-//     console.error(i18n.__('install_failure'))
-//     console.log(err)
-// })
+//download('node-sql')
+
+npmInstall('', info => console.log(info), err => console.error(err)).then(() => {
+    console.log(i18n.__('install_complete'))
+})
+.error(err => {
+    console.error(i18n.__('install_failure'))
+    console.log(err)
+})
