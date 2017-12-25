@@ -2,14 +2,18 @@
     用于模块文件及依赖自动下载，使用npm完成，吴丹妮
 */
 
-import { spawn } from 'child_process'
+import {
+    spawn
+} from 'child_process'
+
 import config from './config'
+import lang from 'i18n'
 
 // 下载前进行验证，如果确实是j3模块，则下载
 export default async function (name, stdout, stderr) {
     if (!await valid(name, stdout, stderr)) {
-        console.log('不是J3模块包')
-        return;
+        console.log(lang.__('not_j3_module'))
+        return
     }
     await npmInstall(name, stdout, stderr)
 }
@@ -33,7 +37,8 @@ function run(cmd, args, options, stdout, stderr) {
     return new Promise((resolve, reject) => {
         let ls = spawn(cmd, args, options)
 
-        let err = '', info = ''
+        let err = '',
+            info = ''
         ls.stdout.on('data', data => {
             let str = data.toString()
             info += str
@@ -49,8 +54,7 @@ function run(cmd, args, options, stdout, stderr) {
         ls.on('exit', () => {
             if (err) {
                 reject(err)
-            }
-            else {
+            } else {
                 resolve(info)
             }
         })
@@ -59,16 +63,18 @@ function run(cmd, args, options, stdout, stderr) {
 
 export async function npmInstall(name, stdout, stderr) {
     try {
-        await run(config.npm_path, [ 'install', name ], { cwd: config.modules_path }, stdout, stderr)
-    } catch(err) {
+        await run(config.npm_path, ['install', name], {
+            cwd: config.modules_path
+        }, stdout, stderr)
+    } catch (err) {
         throw err
     }
 }
 
 export async function npmView(name, stdout, stderr) {
     try {
-        return await run(config.npm_path, [ 'view', name ], undefined, stdout, stderr)
-    } catch(err) {
+        return await run(config.npm_path, ['view', name], undefined, stdout, stderr)
+    } catch (err) {
         throw err
     }
 }

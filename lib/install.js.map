@@ -1,1 +1,1 @@
-{"version":3,"sources":[],"names":[],"mappings":"","file":"install.js","sourcesContent":[]}
+{"version":3,"sources":["../src/install.js"],"names":["name"],"mappings":";;;;;;kBAGe,UAASA,IAAT,EAAe,CAE7B,C;;AALD","file":"install.js","sourcesContent":["import config from './config'\r\n\r\n// 安装模块\r\nexport default function(name) {\r\n    \r\n}"]}
