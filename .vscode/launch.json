@@ -8,7 +8,12 @@
             "type": "node",
             "request": "launch",
             "name": "Test",
-            "program": "${workspaceFolder}\\test.js"
+            "program": "${workspaceFolder}\\src\\test.js",
+            "sourceMaps": true,
+            "outFiles": [
+                "${workspaceRoot}\\lib\\test.js"
+            ],
+            "preLaunchTask": "build"
         }
     ]
 }

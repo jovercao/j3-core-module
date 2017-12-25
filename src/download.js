@@ -9,8 +9,9 @@ import config from './config'
 export default async function (name, stdout, stderr) {
     if (!await valid(name, stdout, stderr)) {
         console.log('不是J3模块包')
+        return;
     }
-    await download(name, stdout, stderr)
+    await npmInstall(name, stdout, stderr)
 }
 
 // 验证模块是否符合需求
@@ -20,7 +21,7 @@ export async function valid(name, stdout, stderr) {
     }, data => {
         console.error(data)
     })
-    let pkg = JSON.parse(json)
+    let pkg = eval('(' + json + ')')
     if (!pkg.j3Config) {
         return false
     }
@@ -34,13 +35,15 @@ function run(cmd, args, options, stdout, stderr) {
 
         let err = '', info = ''
         ls.stdout.on('data', data => {
-            info += data
-            stdout(data)
+            let str = data.toString()
+            info += str
+            stdout(str)
         })
 
         ls.stderr.on('data', data => {
-            err += data
-            stderr(data)
+            let str = data.toString()
+            err += str
+            stderr(str)
         })
 
         ls.on('exit', () => {
@@ -56,7 +59,7 @@ function run(cmd, args, options, stdout, stderr) {
 
 export async function npmInstall(name, stdout, stderr) {
     try {
-        await run(config.npm_default_path, [ 'install', name ], undefined, stdout, stderr)
+        await run(config.npm_path, [ 'install', name ], { cwd: config.modules_path }, stdout, stderr)
     } catch(err) {
         throw err
     }
@@ -64,7 +67,7 @@ export async function npmInstall(name, stdout, stderr) {
 
 export async function npmView(name, stdout, stderr) {
     try {
-        return await run(config.npm_default_path, [ 'view', name ], undefined, stdout, stderr)
+        return await run(config.npm_path, [ 'view', name ], undefined, stdout, stderr)
     } catch(err) {
         throw err
     }
