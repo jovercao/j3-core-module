@@ -1,0 +1,6 @@
+{
+    "not-j3-module": "模块不是J3模块！无法下载安装。",
+    "download-complete": "模块下载完成。",
+    "install-complete": "安装成功",
+    "install-failure": "安装失败"
+}

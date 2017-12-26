@@ -12,10 +12,11 @@ import lang from 'i18n'
 // 下载前进行验证，如果确实是j3模块，则下载
 export default async function (name, stdout, stderr) {
     if (!await valid(name, stdout, stderr)) {
-        console.log(lang.__('not_j3_module'))
+        console.log(lang.__('not-j3-module'))
         return
     }
     await npmInstall(name, stdout, stderr)
+    console.log(lang.__('download-complete'))
 }
 
 // 验证模块是否符合需求
@@ -26,7 +27,7 @@ export async function valid(name, stdout, stderr) {
         console.error(data)
     })
     let pkg = eval('(' + json + ')')
-    if (!pkg.j3Config) {
+    if (!pkg.j3) {
         return false
     }
     return true
@@ -62,19 +63,9 @@ function run(cmd, args, options, stdout, stderr) {
 }
 
 export async function npmInstall(name, stdout, stderr) {
-    try {
-        await run(config.npm_path, ['install', name], {
-            cwd: config.modules_path
-        }, stdout, stderr)
-    } catch (err) {
-        throw err
-    }
+    return await run(config.npm_path, ['install', name], undefined, stdout, stderr)
 }
 
 export async function npmView(name, stdout, stderr) {
-    try {
-        return await run(config.npm_path, ['view', name], undefined, stdout, stderr)
-    } catch (err) {
-        throw err
-    }
+    return await run(config.npm_path, ['view', name], undefined, stdout, stderr)
 }

@@ -51,16 +51,28 @@
 
 
 
-import { download } from './index'
+import { download } from '../src'
+import { npmInstall } from '../src/download'
 
 // var download = require('./src')
 
-download('node-sql')
 
-// npmInstall('', info => console.log(info), err => console.error(err)).then(() => {
-//     console.log(i18n.__('install_complete'))
-// })
-// .error(err => {
-//     console.error(i18n.__('install_failure'))
-//     console.log(err)
-// })
+const module_name = 'node-sql'
+
+// 执行测试
+async function doTest(params) {
+
+    // npm 模块下载测试(含验证)
+    // await download(module_name)
+
+    // npm 模块下载测试（不含验证）
+    await npmInstall(module_name, (data) => {
+        console.log(data.toString())
+    }, data => {
+        console.error(data.toString())
+    })
+}
+
+
+doTest()
+
